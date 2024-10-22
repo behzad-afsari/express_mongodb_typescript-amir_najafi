@@ -1,28 +1,61 @@
-import express , {  Router , Request, Response} from "express";
-// const router = express.Router()
-const router = Router()
+import express , {  Request, Response} from "express";
+const router = express.Router()
 
 import {authMiddleware,validatorMiddleWare} from '../middlewares'
-import { getAllUsers } from "./userServices";
 import {createUserDto} from './dtos/createUserDto'
+import iUser from "./dtos/userDto";
+import {createNewUser,getUserById,getAllUsers,deleteUserbyId,updateUserById} from './userServices'
 
-router.get('/', (req : Request,res: Response)=>{
-    const allUsers = getAllUsers()
+
+router.get('/', async (req : Request,res: Response)=>{
     try {
+        const allUsers = await getAllUsers()
         res.status(200).send(allUsers)
     } catch (error: any) {
         res.status(500).send({message : error.message})
     }
 })
 
-router.get('/:id',(req : Request,res: Response)=>{
-    res.status(200).send(`Get user id ${req.params.id}`)
+router.get('/:id',async (req : Request,res: Response)=>{
+    try {
+        const user = await getUserById(req.params.id)
+        res.status(200).json({success : true,user})
+    } catch (error) {
+        res.status(400).json({success : false, msg : "user not Found."})
+    }
 })
 
-router.post('/' ,authMiddleware, validatorMiddleWare(createUserDto), (req: Request,res: Response)=>{
-    const newUser = req.body
-    res.status(200).send(newUser)
+router.delete('/:id',async (req : Request,res: Response)=>{
+    try {
+        const user = await deleteUserbyId(req.params.id)
+        res.status(200).json({success : true,user})
+    } catch (error) {
+        res.status(400).json({success : false, msg : "user not Found."})
+    }
 })
+
+router.post('/' ,authMiddleware, validatorMiddleWare(createUserDto), async (req: Request,res: Response)=>{
+    const userFromBody : iUser = req.body
+    const userCreated  = await createNewUser(userFromBody)
+    console.log('>>>',userCreated);
+    
+    res.status(200).send(userCreated)
+})
+
+
+router.put('/:id' ,authMiddleware, async (req: Request,res: Response)=>{
+    const newData = req.body
+    const id : string = req.params.id
+    const userUpdated = await updateUserById(id,newData)
+    // res.status(200).send(`Update  user id ${req.params.id} / data : ${newData}`)
+    res.status(200).send(userUpdated)
+})
+
+export default router
+
+
+
+
 
 
 /* 
@@ -35,16 +68,3 @@ router.post('/' ,authMiddleware, validatorMiddleWare(createUserDto), (req: Reque
     "site":  "www.behzad.com"
 }
  */
-
-
-
-router.put('/:id' ,authMiddleware, (req: Request,res: Response)=>{
-    const newData = req.body
-    res.status(200).send(`Update  user id ${req.params.id} / data : ${newData}`)
-})
-
-router.delete('/:id' ,authMiddleware, (req: Request,res: Response)=>{
-    res.status(200).send(`delete user id ${req.params.id}`)
-})
-
-export default router
