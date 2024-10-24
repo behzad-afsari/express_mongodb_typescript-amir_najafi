@@ -11,7 +11,6 @@ export default class registerDto {
     @IsDefined()
     email : string;
     
-    // @IsStrongPassword()
     @MinLength(3)
     @MaxLength(30)
     @IsDefined()

@@ -7,7 +7,7 @@ import loginDto from './dtos/loginUserDto'
 import registerDto from "./dtos/registerUserDto"
 import {encodeToken,decodeToken} from '../utils/userToken'
 
-
+//login
 router.post('/login',validatorMiddleWare(loginDto), async (req : Request,res: Response)=>{
     try {
         // const token = encodeToken(req.body.email)
@@ -23,13 +23,19 @@ router.post('/login',validatorMiddleWare(loginDto), async (req : Request,res: Re
     }
 })
 
+//register
 router.post('/register',validatorMiddleWare(registerDto),async (req : Request,res: Response)=>{
     try {
-        res.send(userRegiseterService())
-    } catch (error) {
-        res.status(400).json({success : false, msg : "user not Found."})
+        const result = await userRegiseterService(req.body)
+        res.send(result)
+    } catch (error: any) {
+        res.status(800).json({success : false, msg : error.message})
     }
 })
+
+
+
+
 
 router.post('/forget-password',async (req : Request,res: Response)=>{
     try {
