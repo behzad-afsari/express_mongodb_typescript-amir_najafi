@@ -1,5 +1,6 @@
 import iUser from "./dtos/userDto";
 import userModel from "../models/userModel";
+import ServerError from "../errors/serverError";
 
 export const getAllUsers = async () => {
   const allUsers = await userModel.find();
@@ -36,3 +37,5 @@ export const updateUserById = async (id: string, data: iUser) => {
     throw new Error("Error ::" + error);
   }
 };
+
+

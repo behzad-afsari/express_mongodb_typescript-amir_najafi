@@ -1,9 +1,10 @@
-import express , {  Request, Response} from "express";
+import express , {  NextFunction, Request, Response} from "express";
 const router = express.Router()
 
 import {authMiddleware,validatorMiddleWare} from '../middlewares'
 import {createUserDto} from './dtos/createUserDto'
 import {createNewUser,getUserById,getAllUsers,deleteUserbyId,updateUserById} from './userServices'
+import ServerError from "../errors/serverError";
 
 
 router.get('/',authMiddleware, async (req : Request,res: Response)=>{
@@ -46,6 +47,8 @@ router.put('/:id' ,authMiddleware, async (req: Request,res: Response)=>{
     // res.status(200).send(`Update  user id ${req.params.id} / data : ${newData}`)
     res.status(200).send(userUpdated)
 })
+
+
 
 export default router
 

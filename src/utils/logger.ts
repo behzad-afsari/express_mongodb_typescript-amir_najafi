@@ -25,6 +25,7 @@ export default winston.createLogger({
         }),
         new winston.transports.File({filename : "./logs/error.log",level: "error" , maxsize: 100*1024*1024 , maxFiles: 10}),
         new winston.transports.File({filename : "./logs/warn.log",level: "warn" , maxsize: 100*1024*1024 , maxFiles: 10}),
-        new winston.transports.File({filename : "./logs/info.log",level: "info" , maxsize: 100*1024*1024 , maxFiles: 10})
+        new winston.transports.File({filename : "./logs/info.log",level: "info" , maxsize: 100*1024*1024 , maxFiles: 10}),
+        // new winston.transports.File({filename : "./logs/user_req.log",level: "reqUser" , maxsize: 100*1024*1024 , maxFiles: 10})
     ]
 })
