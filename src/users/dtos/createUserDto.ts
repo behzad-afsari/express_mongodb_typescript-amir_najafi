@@ -4,7 +4,7 @@ export class createUserDto {
     
     @MaxLength(20,{message: "max 20 charachter"})
     @MinLength(3/* ,{message: "min 3 charachter"} */)
-    name: string;
+    username: string;
 
     @IsEmail()
     email : string;
@@ -14,15 +14,15 @@ export class createUserDto {
     @MaxLength(30)
     password: string;
 
-    @IsOptional()
-    @IsInt()
-    @Min(0)
-    @Max(99)
-    age: number;
+    // @IsOptional()
+    // @IsInt()
+    // @Min(0)
+    // @Max(99)
+    // age: number;
 
-    @IsDateString()
-    birthDay : Date;
+    // @IsDateString()
+    // birthDay : Date;
 
-    @IsFQDN()
-    site: string;
+    // @IsFQDN()
+    // site: string;
 }

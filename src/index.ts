@@ -6,6 +6,7 @@ import { logrequest } from "./middlewares";
 import { userControllesrs } from "./users";
 import { productControllers } from "./products";
 import { authControllers } from "./auth";
+import logger from './utils/logger'
 
 const app = express();
 
@@ -33,9 +34,13 @@ const DBURI = "mongodb://localhost:27017/amir-najafi";
 mongoose
   .connect(DBURI,{})
   .then(()=>{
-      app.listen(3000, () => console.log("app listen on port 3000"));
+      app.listen(3000, () => {
+        // console.log("app listen on port 3000");
+        logger.info("app listen on port 3000");
+        logger.warn('the server warning')
+      } )
   })
   .catch((err) => {
-    console.log("Error :", err);
+    // console.log("Error :", err);
+    logger.error("Error :", err);
   });
-
