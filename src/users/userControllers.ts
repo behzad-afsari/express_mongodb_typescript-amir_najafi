@@ -3,11 +3,10 @@ const router = express.Router()
 
 import {authMiddleware,validatorMiddleWare} from '../middlewares'
 import {createUserDto} from './dtos/createUserDto'
-import iUser from "./dtos/userDto";
 import {createNewUser,getUserById,getAllUsers,deleteUserbyId,updateUserById} from './userServices'
 
 
-router.get('/', async (req : Request,res: Response)=>{
+router.get('/',authMiddleware, async (req : Request,res: Response)=>{
     try {
         const allUsers = await getAllUsers()
         res.status(200).send(allUsers)
@@ -35,13 +34,10 @@ router.delete('/:id',async (req : Request,res: Response)=>{
 })
 
 router.post('/' ,authMiddleware, validatorMiddleWare(createUserDto), async (req: Request,res: Response)=>{
-    const userFromBody : iUser = req.body
-    const userCreated  = await createNewUser(userFromBody)
-    console.log('>>>',userCreated);
-    
-    res.status(200).send(userCreated)
+    const userData : createUserDto = req.body
+    const result = await createNewUser(userData)
+    res.send(result)
 })
-
 
 router.put('/:id' ,authMiddleware, async (req: Request,res: Response)=>{
     const newData = req.body
@@ -52,10 +48,6 @@ router.put('/:id' ,authMiddleware, async (req: Request,res: Response)=>{
 })
 
 export default router
-
-
-
-
 
 
 /* 

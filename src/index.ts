@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { logrequest } from "./middlewares";
 import { userControllesrs } from "./users";
 import { productControllers } from "./products";
+import { authControllers } from "./auth";
 
 const app = express();
 
@@ -20,7 +21,8 @@ app.get("/", (req: Request, res: Response) => {
 
 // Routes
 app.use("/user", userControllesrs);
-app.use("/products", userControllesrs);
+app.use("/products", productControllers);
+app.use("/auth", authControllers);
 
 //404
 app.get("*", (req: Request, res: Response) => {
