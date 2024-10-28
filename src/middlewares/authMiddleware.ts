@@ -4,7 +4,7 @@ import userModel from "../models/userModel";
 import logger from "../utils/logger";
 import RequestWithUser from '../types/requestWithUser'
 
-export const authMiddleware = async (req: RequestWithUser,res: Response,next: NextFunction) => {
+export const authMiddleware = async (req: any, res: Response,next: NextFunction) => {
   let token = req.headers.authorization;
   if (!token) {
     res.status(404).send("unAuthorize user");
@@ -12,8 +12,9 @@ export const authMiddleware = async (req: RequestWithUser,res: Response,next: Ne
     try {
       token = token.split(" ")[1];
       const verifyToken : any = decodeToken(token);
-      req.user = verifyToken.id
-
+      req.body.user = verifyToken.id
+      console.log("******************", req.user);
+      
       console.log('verifyToken :',verifyToken);
 
       ///////// if you whant get user info from database that send request.

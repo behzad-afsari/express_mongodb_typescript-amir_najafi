@@ -22,7 +22,8 @@ router.get('/:id', async (req : Request,res: Response, next: NextFunction)=>{
     res.status(200).send(`Get product id ${req.params.id}`)
 })
 
-router.post('/' , authMiddleware, async ( req: RequestWithUser, res: Response, next: NextFunction )=>{
+router.post('/' , authMiddleware, async ( req: any, res: Response, next: NextFunction )=>{
+    console.log('++++++++++++++++++++++++++++',req.body);
     try {
         const newProductData: createProductDto = req.body
         const productCreated = await createNewProduct(newProductData)
@@ -33,12 +34,12 @@ router.post('/' , authMiddleware, async ( req: RequestWithUser, res: Response, n
     
 })
 
-router.put('/:id' ,authMiddleware, async (req: RequestWithUser,res: Response, next: NextFunction)=>{
+router.put('/:id' ,authMiddleware, async (req: Request,res: Response, next: NextFunction)=>{
     const newData = req.body
     res.status(200).send(`Update  product id ${req.params.id} / data : ${newData}`)
 })
 
-router.delete('/:id' ,authMiddleware, async (req: RequestWithUser,res: Response, next: NextFunction)=>{
+router.delete('/:id' ,authMiddleware, async (req: Request,res: Response, next: NextFunction)=>{
     res.status(200).send(`delete product id ${req.params.id}`)
 })
 

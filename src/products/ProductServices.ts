@@ -13,6 +13,8 @@ export const getOneProducts = async (id:string) =>{
 
 export const createNewProduct = async (data: createProductDto) =>{
     try {
+        // data.user = data.
+        console.log('--------------------------',data);
         const newProductData  = new productModel(data)
         const productCreated = newProductData.save()
         return (productCreated)

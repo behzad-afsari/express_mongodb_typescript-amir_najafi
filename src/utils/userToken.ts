@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 const JWT_SECRET = "behzad"
 
 export const encodeToken = (payload: {} )=> {
-    const token = jwt.sign(payload,JWT_SECRET,{expiresIn: "1m"})
+    const token = jwt.sign(payload,JWT_SECRET,{expiresIn: "1h"})
     return token
 }
 
