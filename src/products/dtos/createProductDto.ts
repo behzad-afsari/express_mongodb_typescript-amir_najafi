@@ -1,22 +1,23 @@
-import{IsDate, IsDateString, IsEmail, IsFQDN, IsInt, IsOptional, IsStrongPassword, Max, MaxLength, Min, MinLength} from "class-validator"
+import{IsDate, IsDateString, IsDefined, IsEmail, IsFQDN, IsInt, IsOptional, IsStrongPassword, Max, MaxLength, Min, MinLength} from "class-validator"
 
 export class createProductDto {
     
     @MaxLength(20,{message: "max 20 charachter"})
-    @MinLength(3/* ,{message: "min 3 charachter"} */)
-    titile: string;
+    @MinLength(3 )
+    @IsDefined()
+    title: string;
 
-    @IsEmail()
+    @IsDefined()
     description : string;
-
-    @IsStrongPassword()
-    @MinLength(8)
-    @MaxLength(30)
+    
+    @IsDefined()
+    @Max(1000)
     price: string;
 
-
+    @IsOptional()
     tags: string[];
 
+    @IsDefined()
     user: string;
     // @IsOptional()
     // @IsInt()

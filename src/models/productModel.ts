@@ -4,8 +4,12 @@ const productSchema = new mongoose.Schema({
     title: String, 
     description: String,
     price: Number,
-    tags: [String],
+    tags: {
+        type: [String],
+        default:[] 
+    },
     user: {
+        required:true,
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     }
