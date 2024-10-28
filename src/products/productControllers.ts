@@ -1,16 +1,18 @@
 import express , {  Router , Request, Response, NextFunction} from "express";
-// const router = express.Router()
-const router = Router()
+const router = express.Router()
+// const router = Router()
 
 import {authMiddleware, validatorMiddleWare} from '../middlewares'
 
 import { getAllProducts,getOneProducts,createNewProduct,updateProduct,deleteProduct } from "./ProductServices";
 import { createProductDto } from "./dtos/createProductDto";
+import {getproductQuerytDto} from './dtos/getproductQuerytDto'
 import RequestWithUser from '../types/requestWithUser'
-import { log } from "console";
 
 router.get('/', async(req : Request,res: Response, next: NextFunction)=>{
-    const allProducts = await getAllProducts()
+    const filter :any /* getproductQuerytDto */ = req.query
+    console.log(filter);
+    const allProducts = await getAllProducts(filter)
     try {
         res.status(200).send(allProducts)
     } catch (error: any) {
@@ -20,7 +22,13 @@ router.get('/', async(req : Request,res: Response, next: NextFunction)=>{
 })
 
 router.get('/:id', async (req : Request,res: Response, next: NextFunction)=>{
-    res.status(200).send(`Get product id ${req.params.id}`)
+    try {
+        const productId = req.params.id
+        const result = await getOneProducts(productId)
+        res.status(200).send(result)
+    } catch (error) {
+        next(error)
+    }
 })
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -12,6 +12,14 @@ const productSchema = new mongoose.Schema({
         required:true,
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
+    },
+    createAt:{
+        type: Date,
+        default : Date.now
+    },
+    updateAt:{
+        type: Date,
+        default : Date.now
     }
 })
 

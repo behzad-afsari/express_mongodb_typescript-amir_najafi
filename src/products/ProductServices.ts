@@ -3,14 +3,28 @@ import ClientError from "../errors/clientError"
 import ServerError from "../errors/serverError"
 import productModel from "../models/productModel"
 import { createProductDto } from "./dtos/createProductDto"
+import {getproductQuerytDto} from './dtos/getproductQuerytDto'
 
-export const getAllProducts = async () =>{
-    const allproducts = await productModel.find({})
+export const getAllProducts = async (filter : getproductQuerytDto) =>{
+    const {title,description,start_price,end_price,tags,page,page_size} = filter
+    let query : any = {}
+    if(tags) query["tags"] = {$in : [tags]}
+    if(start_price && end_price) query.price = {$gt: start_price , $lt : end_price}
+    //...
+    const allproducts = await productModel.find(query , {} , {skip:page_size*(page-1), limit: page_size})
     return (allproducts)
 }
 
-export const getOneProducts = async (id:string) =>{
-    return ([])
+export const getOneProducts = async (productId:string) =>{
+    try {
+        const findProduct = await productModel.findOne({_id:productId})
+        if(!findProduct){
+            return {message: "product not found"}
+        }
+        return findProduct
+    } catch (error: any) {
+        throw new ServerError(400,error? error.message : "bad request");
+    }
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++
