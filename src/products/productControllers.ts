@@ -22,8 +22,9 @@ router.get('/:id', async (req : Request,res: Response, next: NextFunction)=>{
     res.status(200).send(`Get product id ${req.params.id}`)
 })
 
-router.post('/' , authMiddleware, async ( req: any, res: Response, next: NextFunction )=>{
-    console.log('++++++++++++++++++++++++++++',req.body);
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++
+router.post('/' , authMiddleware, async ( req: Request, res: Response, next: NextFunction )=>{
     try {
         const newProductData: createProductDto = req.body
         const productCreated = await createNewProduct(newProductData)
