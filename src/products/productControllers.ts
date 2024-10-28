@@ -1,36 +1,45 @@
-import express , {  Router , Request, Response} from "express";
+import express , {  Router , Request, Response, NextFunction} from "express";
 // const router = express.Router()
 const router = Router()
 
 import {authMiddleware} from '../middlewares'
 
-import { getAllUsers } from "./ProductServices";
+import { getAllProducts,getOneProducts,createNewProduct,updateProduct,deleteProduct } from "./ProductServices";
+import { createProductDto } from "./dtos/createProductDto";
+import RequestWithUser from '../types/requestWithUser'
 
-router.get('/', (req : Request,res: Response)=>{
-    const allUsers = getAllUsers()
+router.get('/', async(req : Request,res: Response, next: NextFunction)=>{
+    const allProducts = await getAllProducts()
     try {
-        res.status(200).send(allUsers)
+        res.status(200).send(allProducts)
     } catch (error: any) {
-        res.status(500).send({message : error.message})
+        // res.status(500).send({message : error.message})
+        next(error)
     }
 })
 
-router.get('/:id', (req : Request,res: Response)=>{
-    res.status(200).send(`Get user id ${req.params.id}`)
+router.get('/:id', async (req : Request,res: Response, next: NextFunction)=>{
+    res.status(200).send(`Get product id ${req.params.id}`)
 })
 
-router.post('/' ,authMiddleware, (req: Request,res: Response)=>{
-    const newUser = req.body
-    res.status(200).send(newUser)
+router.post('/' , authMiddleware, async ( req: RequestWithUser, res: Response, next: NextFunction )=>{
+    try {
+        const newProductData: createProductDto = req.body
+        const productCreated = await createNewProduct(newProductData)
+        res.status(200).send(productCreated)
+    } catch (error) {
+        next(error)
+    }
+    
 })
 
-router.put('/:id' ,authMiddleware, (req: Request,res: Response)=>{
+router.put('/:id' ,authMiddleware, async (req: RequestWithUser,res: Response, next: NextFunction)=>{
     const newData = req.body
-    res.status(200).send(`Update  user id ${req.params.id} / data : ${newData}`)
+    res.status(200).send(`Update  product id ${req.params.id} / data : ${newData}`)
 })
 
-router.delete('/:id' ,authMiddleware, (req: Request,res: Response)=>{
-    res.status(200).send(`delete user id ${req.params.id}`)
+router.delete('/:id' ,authMiddleware, async (req: RequestWithUser,res: Response, next: NextFunction)=>{
+    res.status(200).send(`delete product id ${req.params.id}`)
 })
 
 export default router
